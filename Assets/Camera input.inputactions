@@ -1,0 +1,34 @@
+{
+    "name": "Camera input",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "2f321bca-f2d5-4ba1-88d2-badc906901e3",
+            "actions": [
+                {
+                    "name": "Look around",
+                    "type": "Value",
+                    "id": "cbb1ae5d-0b98-486d-ba8d-f31a1dda1167",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "fb0ce275-c954-44c0-9d5e-2d22345c74ad",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look around",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
