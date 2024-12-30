@@ -17,7 +17,9 @@ namespace BUT
         public float SpeedFactorGamepad => m_SpeedFactorGamepad;
 
         [SerializeField]
-        Vector2 m_RotationXLimits;
+        Vector2 m_RotationXLimits = new Vector2(0f, 25f);
+
+        public Vector2 RotationXLimits => m_RotationXLimits;
 
         Vector3 m_CurrentRotation;
 
@@ -27,7 +29,7 @@ namespace BUT
         }
 
         private void Update(){
-            // VÃ©rifie si un Gamepad est connectÃ©
+            // Vérifie si un Gamepad est connecté
             if (Gamepad.current != null) {
 
                 // Lecture de l'input du joystick droit
@@ -37,7 +39,7 @@ namespace BUT
         }
 
         private void RotateCamera(Vector2 input, float speedFactor){
-            // VÃ©rifie si l'input est significatif
+            // Vérifie si l'input est significatif
             if (input.magnitude > 0.1f){
                 // Ajout de rotation
                 m_CurrentRotation.y += input.x * SpeedRotation * speedFactor; 

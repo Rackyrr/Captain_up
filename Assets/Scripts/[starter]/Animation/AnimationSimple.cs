@@ -13,7 +13,7 @@ namespace BUT
 
         public void Moving(bool moving)
         {
-            m_Animator?.SetBool("Move", moving);
+            m_Animator?.SetBool("IsWalking", moving);
         }
 
         public void ChangeSpeed(float speed)
