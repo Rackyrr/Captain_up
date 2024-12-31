@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5067054250549034134
+--- !u!1001 &6506522518958195530
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.7
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.7
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.3682303
+      value: 0.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalPosition.y
@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.59
+      value: -8.796433
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalRotation.w
@@ -34,7 +34,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_LocalRotation.y
@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_Name
-      value: Coin
+      value: CoinCollectible 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -66,22 +66,48 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2976807269505278093}
+      addedObject: {fileID: 6087054600987342178}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7056148604358457773}
   m_SourcePrefab: {fileID: 100100000, guid: 62854a25f1284484482ec950aa683a27, type: 3}
---- !u!1 &5372973779617481159 stripped
+--- !u!1 &6235979238568656411 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
-  m_PrefabInstance: {fileID: 5067054250549034134}
+  m_PrefabInstance: {fileID: 6506522518958195530}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2976807269505278093
+--- !u!114 &6087054600987342178
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5372973779617481159}
+  m_GameObject: {fileID: 6235979238568656411}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92c1e2a34db607e45aa4bdd4a2f437da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CoinManager: {fileID: 0}
+  onCollectEffect: {fileID: 9163842254569548763, guid: 6be59838497a290419a0cbb4af8b4a51, type: 3}
+--- !u!65 &7056148604358457773
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6235979238568656411}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
