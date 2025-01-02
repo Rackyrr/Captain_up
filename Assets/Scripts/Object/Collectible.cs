@@ -7,6 +7,8 @@ public class SpinCoin : MonoBehaviour
     public CoinManager CoinManager;
     public GameObject onCollectEffect;
 
+    public string playerTag = "Player";
+
     // Update is called once per frame
     void Update()
     { 
@@ -15,8 +17,11 @@ public class SpinCoin : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
-        Instantiate(onCollectEffect, transform.position, transform.rotation);
-        CoinManager.AddCoin();
+        if (other.CompareTag(playerTag))
+        {
+            Destroy(gameObject);
+            Instantiate(onCollectEffect, transform.position, transform.rotation);
+            CoinManager.AddCoin();
+        }
     }
 }

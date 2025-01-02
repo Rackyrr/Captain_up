@@ -7,6 +7,8 @@ public class UiManager : MonoBehaviour
     public GameObject HUDGame;
     public GameObject HUDEndGame;
     public GameObject PauseMenu;
+    public GameObject DeathScreen;
+
 
     public bool GameFinish = false;
     // private bool isPaused = false;
@@ -14,6 +16,7 @@ public class UiManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DeathScreen.SetActive(false);
         ShowUIGame();
         ResumeGame();
     }
@@ -77,5 +80,10 @@ public class UiManager : MonoBehaviour
     private void ResumeGame()
     {
         Time.timeScale = 1f; // Rétablit le temps normal
+    }
+
+    public void ShowDeathScreen()
+    {
+        DeathScreen.SetActive(true);
     }
 }

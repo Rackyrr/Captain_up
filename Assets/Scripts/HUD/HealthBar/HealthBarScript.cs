@@ -9,10 +9,18 @@ public class HealthBarScript : MonoBehaviour
 
     public float health = 100f;
     public float maxHealth = 100f;
+    public bool IsDead = false;
 
     public Image healthBarImage;
 
-     public UnityEvent Death;
+    public UnityEvent Death;
+
+    public AudioClip DeathSound;
+
+    public UiManager _UiManager;
+
+    public MonoBehaviour movementScript;
+
 
     // Update is called once per frame
     void Update()
@@ -50,9 +58,33 @@ public class HealthBarScript : MonoBehaviour
         }
     }
 
+
     public void die()
     {
         Death?.Invoke();
-        //Faire les HUD
+        if (!IsDead)
+        {
+            IsDead = true;
+            if (movementScript != null)
+            {
+                movementScript.enabled = false; // Désactive le script de mouvement
+            }
+            if (DeathSound != null)
+            {
+                AudioSource.PlayClipAtPoint(DeathSound, Vector3.zero);
+            }
+            _UiManager.ShowDeathScreen();
+            StartCoroutine(RespawnAfterDelay(8f));
+        }
+    }
+
+    private IEnumerator RespawnAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (movementScript != null)
+        {
+            movementScript.enabled = true;
+        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
     }
 }

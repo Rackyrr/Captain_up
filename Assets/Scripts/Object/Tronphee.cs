@@ -9,6 +9,8 @@ public class Tronphee : MonoBehaviour
     public AudioClip tronpheeSound;
     public UiManager _UiManager;
 
+    public string playerTag = "Player";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,12 +25,15 @@ public class Tronphee : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Destroy(gameObject);
-        Instantiate(onCollectEffect, transform.position, transform.rotation);
-        if (tronpheeSound != null)
+        if (other.CompareTag(playerTag))
         {
-            AudioSource.PlayClipAtPoint(tronpheeSound, Vector3.zero);
+            Destroy(gameObject);
+            Instantiate(onCollectEffect, transform.position, transform.rotation);
+            if (tronpheeSound != null)
+            {
+                AudioSource.PlayClipAtPoint(tronpheeSound, Vector3.zero);
+            }
+            _UiManager.ShowEndGame();
         }
-        _UiManager.ShowEndGame();
     }
 }

@@ -440,7 +440,7 @@ MonoBehaviour:
   player: {fileID: 0}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 320
+    m_Bits: 1
   playerLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -452,6 +452,7 @@ MonoBehaviour:
   damage: 2
   animator: {fileID: 506847696979061898}
   hitEffect: {fileID: 0}
+  healthHUD: {fileID: 0}
 --- !u!65 &370947316818540420
 BoxCollider:
   m_ObjectHideFlags: 0
