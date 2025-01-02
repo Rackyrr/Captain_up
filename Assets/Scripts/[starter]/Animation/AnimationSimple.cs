@@ -26,10 +26,14 @@ namespace BUT
             m_Animator?.SetBool("IsGrounded", grounded);
         }
 
+        public void Attack()
+        {
+            m_Animator?.SetTrigger("Attack");
+        }
+
         public void Die()
         {
             m_Animator?.SetTrigger("Die");
-
         }
     }
 }
