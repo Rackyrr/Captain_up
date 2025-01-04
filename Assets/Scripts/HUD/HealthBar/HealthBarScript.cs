@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HealthBarScript : MonoBehaviour
 {
@@ -18,9 +19,6 @@ public class HealthBarScript : MonoBehaviour
     public AudioClip DeathSound;
 
     public UiManager _UiManager;
-
-    public MonoBehaviour movementScript;
-
 
     // Update is called once per frame
     void Update()
@@ -65,13 +63,9 @@ public class HealthBarScript : MonoBehaviour
         if (!IsDead)
         {
             IsDead = true;
-            if (movementScript != null)
-            {
-                movementScript.enabled = false; // Désactive le script de mouvement
-            }
             if (DeathSound != null)
             {
-                AudioSource.PlayClipAtPoint(DeathSound, Vector3.zero);
+                PlayDeathSoundOnCamera();
             }
             _UiManager.ShowDeathScreen();
             StartCoroutine(RespawnAfterDelay(8f));
@@ -81,10 +75,33 @@ public class HealthBarScript : MonoBehaviour
     private IEnumerator RespawnAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        if (movementScript != null)
+        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void PlayDeathSoundOnCamera()
+    {
+        // Récupérer la caméra principale
+        Camera mainCamera = Camera.main;
+
+        if (mainCamera != null)
         {
-            movementScript.enabled = true;
+            // Vérifier si la caméra a déjà un AudioSource
+            AudioSource audioSource = mainCamera.GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                // Ajouter un AudioSource si absent
+                audioSource = mainCamera.gameObject.AddComponent<AudioSource>();
+            }
+
+            // Configurer et jouer le son
+            audioSource.clip = DeathSound;
+            audioSource.volume = 0.1f; // Régle le volume
+            audioSource.spatialBlend = 0f; // Son 2D (non-spatialisé)
+            audioSource.Play();
         }
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
+        else
+        {
+            Debug.LogWarning("Aucune caméra principale n'est assignée dans la scène !");
+        }
     }
 }
