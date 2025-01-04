@@ -56,9 +56,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7635826562936255635, guid: 62854a25f1284484482ec950aa683a27, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d166318466f202e42ad16860152ecee3, type: 2}
     - target: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
       propertyPath: m_Name
       value: CoinCollectible 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 62854a25f1284484482ec950aa683a27, type: 3}
+      propertyPath: m_TagString
+      value: Coin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -89,7 +97,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CoinManager: {fileID: 0}
+  _keyManager: {fileID: 0}
   onCollectEffect: {fileID: 9163842254569548763, guid: 6be59838497a290419a0cbb4af8b4a51, type: 3}
+  playerTag: Player
 --- !u!65 &7056148604358457773
 BoxCollider:
   m_ObjectHideFlags: 0

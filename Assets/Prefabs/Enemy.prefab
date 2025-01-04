@@ -449,7 +449,7 @@ MonoBehaviour:
   timeBetweenAttacks: 3
   sightRange: 6.5
   attackRange: 1
-  damage: 2
+  damage: 40
   animator: {fileID: 506847696979061898}
   hitEffect: {fileID: 0}
   healthHUD: {fileID: 0}
