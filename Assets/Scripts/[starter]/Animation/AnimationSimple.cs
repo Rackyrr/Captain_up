@@ -31,6 +31,11 @@ namespace BUT
             m_Animator?.SetTrigger("Attack");
         }
 
+        public void Interact()
+        {
+            m_Animator?.SetTrigger("Interact");
+        }
+
         public void Die()
         {
             m_Animator?.SetTrigger("Die");

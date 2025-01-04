@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpinCoin : MonoBehaviour
 {
     public CoinManager CoinManager;
+    public KeyManager _keyManager;
     public GameObject onCollectEffect;
 
     public string playerTag = "Player";
@@ -21,7 +22,12 @@ public class SpinCoin : MonoBehaviour
         {
             Destroy(gameObject);
             Instantiate(onCollectEffect, transform.position, transform.rotation);
-            CoinManager.AddCoin();
+            if (this.CompareTag("Coin")){
+                CoinManager.AddCoin();
+            }
+            else if (this.CompareTag("Key")){
+                _keyManager.AddKeys();
+            }
         }
     }
 }

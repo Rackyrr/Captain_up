@@ -23,4 +23,13 @@ public class CoinManager : MonoBehaviour
             AudioSource.PlayClipAtPoint(coinSound, Vector3.zero);
         }
     }
+
+    public void AddMultipleCoins(int coinAdded){
+        NbCoin += coinAdded;
+
+        if (coinSound != null)
+        {
+            AudioSource.PlayClipAtPoint(coinSound, Vector3.zero);
+        }
+    }
 }

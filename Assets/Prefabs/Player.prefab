@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 5607975544616991003}
   - component: {fileID: 6537456525469055716}
   - component: {fileID: 9144045414993617917}
+  - component: {fileID: 3328041852448176341}
   m_Layer: 7
   m_Name: AttackArea
   m_TagString: Untagged
@@ -96,6 +97,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 00f5a8b1a6c76914d991729ec3269e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3328041852448176341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2457756562757836558}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2ef87d6fee834c809fe7fd4923a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3223532519127633919
@@ -157,6 +170,7 @@ GameObject:
   - component: {fileID: 5857907367240657557}
   - component: {fileID: 6851208299379981334}
   - component: {fileID: 5206297394981539140}
+  - component: {fileID: 3741235954635432170}
   - component: {fileID: 7490372052224018723}
   m_Layer: 0
   m_Name: Player
@@ -283,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 77907a35bd7f6284486971dc068dd475, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 8a80f7dba892ced4ab51643e00974f1c, type: 3}
   m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -361,9 +375,37 @@ MonoBehaviour:
     m_ActionId: 5fe6263b-0389-4692-ab4d-736d9fc77724
     m_ActionName: Gameplay/Sprint[/Keyboard/leftShift]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5206297394981539140}
+        m_TargetAssemblyTypeName: PlayerCombatSystem, Assembly-CSharp
+        m_MethodName: OnAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: e3ac857b-502c-44f6-af91-a0bc68735e28
     m_ActionName: Gameplay/Attack[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3741235954635432170}
+        m_TargetAssemblyTypeName: PlayerInteract, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f0737cf1-8279-4b4b-b7ff-854329ee34fe
+    m_ActionName: Gameplay/Interact[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Gameplay
@@ -399,6 +441,34 @@ MonoBehaviour:
   DamageAfterTime: 0.45
   NbDamage: 2
   _attackArea: {fileID: 9144045414993617917}
+--- !u!114 &3741235954635432170
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6666426133667894351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5332c514e233271448e049304e4eb75d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnInteractInput:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6042185747745402975}
+        m_TargetAssemblyTypeName: BUT.AnimationSimple, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _interactArea: {fileID: 3328041852448176341}
 --- !u!65 &7490372052224018723
 BoxCollider:
   m_ObjectHideFlags: 0
