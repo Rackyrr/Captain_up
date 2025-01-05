@@ -23,6 +23,11 @@ public class SC_MainMenu : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level2");
     }
 
+    public void PlayLevelThreeButton()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Level3");
+    }
+
     public void CreditsButton()
     {
         // Show Credits Menu
