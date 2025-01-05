@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using BUT;
 
 public class HealthBarScript : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class HealthBarScript : MonoBehaviour
     public AudioClip DeathSound;
 
     public UiManager _UiManager;
+
+    //Pour arrêter les inputs
+    public PlayerInteract _playerInteract;
+    public PlayerCombatSystem _playerCombatSystem;
+    public PlayerMovement _playerMovement;
+
 
     // Update is called once per frame
     void Update()
@@ -63,6 +70,9 @@ public class HealthBarScript : MonoBehaviour
         if (!IsDead)
         {
             IsDead = true;
+            _playerInteract.SetIsDead(true);
+            _playerCombatSystem.SetIsDead(true);
+            _playerMovement.SetIsDead(true);
             if (DeathSound != null)
             {
                 PlayDeathSoundOnCamera();

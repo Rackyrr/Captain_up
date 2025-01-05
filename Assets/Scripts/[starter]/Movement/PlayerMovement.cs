@@ -8,6 +8,8 @@ namespace BUT
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
     {
+        private bool Isdead = false;
+
         [SerializeField]
         Movement m_Movement;
 
@@ -79,25 +81,11 @@ namespace BUT
         public UnityEvent<float> OnSpeedChange;
         public UnityEvent<bool> OnMovingChange;
         public UnityEvent<bool> OnGroundedChange;
+        public UnityEvent OnPlayerDeath;
 
         private void Awake()
         {
             m_CharacterController = GetComponent<CharacterController>();
-        }
-
-        public void MovingChanged(bool _moving)
-        {
-            OnMovingChange?.Invoke(_moving);
-        }
-
-        public void SpeedChanged(float _speed)
-        {
-            OnSpeedChange?.Invoke(_speed);
-        }
-
-        public void GroundedChanged(bool _grounded)
-        {
-            OnGroundedChange?.Invoke(_grounded);
         }
 
         private void OnDisable()
@@ -114,13 +102,11 @@ namespace BUT
         {
             while (enabled)
             {
+                if (Isdead) yield return new WaitForFixedUpdate(); // Arrêter les mouvements si mort
+
                 if (m_MovementInput.magnitude > 0.1f)
                 {
-                    if (!IsMoving)
-                    {
-                        IsMoving = true;
-                    }
-                    // clamp input magnitude
+                    if (!IsMoving) IsMoving = true;
                     m_MovementInput = Vector3.ClampMagnitude(m_MovementInput, 1);
                 }
                 else if (IsMoving)
@@ -132,23 +118,28 @@ namespace BUT
                 ManageGravity();
                 if (IsMoving) ApplyRotation();
                 ApplyMovement();
+
                 yield return new WaitForFixedUpdate();
             }
         }
 
         public void SetInputMove(InputAction.CallbackContext _context)
         {
+            if (Isdead) return;
             m_MovementInput = _context.ReadValue<Vector2>();
         }
 
         public void SetInputJump(InputAction.CallbackContext _context)
         {
+            if (Isdead) return;
             if (!_context.started || (!m_CharacterController.isGrounded && JumpNumber >= m_Movement.MaxJumpNumber)) return;
+
             if (JumpNumber == 0) StartCoroutine(WaitForLanding());
             JumpNumber++;
 
-            if (m_Movement.MinimazeJumpPower) GravityVelocity += m_Movement.JumpPower / JumpNumber;
-            else GravityVelocity += m_Movement.JumpPower;
+            GravityVelocity += m_Movement.MinimazeJumpPower
+                ? m_Movement.JumpPower / JumpNumber
+                : m_Movement.JumpPower;
         }
 
         IEnumerator WaitForLanding()
@@ -160,70 +151,68 @@ namespace BUT
 
         public void SetInputSprint(InputAction.CallbackContext _context)
         {
+            if (Isdead) return;
             IsSprinting = _context.started || _context.performed;
         }
 
         private void ManageDirection()
         {
-            // set direction
-            m_MovementDirection = new Vector3(m_MovementInput.x, 0, m_MovementInput.y);
+            if (Isdead) return;
 
-            // modify direction according to camera view
+            m_MovementDirection = new Vector3(m_MovementInput.x, 0, m_MovementInput.y);
             m_MovementDirection = Camera.main.transform.TransformDirection(m_MovementDirection);
             m_MovementDirection.y = transform.forward.y;
-            Debug.DrawRay(transform.position, -transform.up * m_RayLenght, Color.red);
+
             if (Physics.Raycast(transform.position, -transform.up, out m_Hit, m_RayLenght, m_RayMask))
             {
                 IsGrounded = true;
                 float angleOffset = Vector3.SignedAngle(transform.up, m_Hit.normal, transform.right);
                 GroundRotationOffset = Quaternion.AngleAxis(angleOffset, transform.right);
-                Debug.DrawRay(transform.position, GroundRotationOffset * m_MovementDirection, Color.green);
-                //m_MovementDirection = Quaternion.LookRotation(m_Hit.normal) * m_MovementDirection;
             }
             else
             {
                 IsGrounded = m_CharacterController.isGrounded;
                 GroundRotationOffset = Quaternion.identity;
             }
+
             m_MovementDirection.Normalize();
-
             Direction = m_MovementDirection;
-            Debug.DrawRay(transform.position, Direction, Color.red);
 
-            // calculate speed according to input force
             CurrentSpeed = ((IsSprinting) ? m_Movement.SprintFactor : 1) * m_Movement.MaxSpeed * m_Movement.SpeedFactor.Evaluate(m_MovementInput.magnitude);
         }
 
         public void ApplyRotation()
         {
-            if (!IsMoving) return;
+            if (Isdead || !IsMoving) return;
 
-            // calculate target rotation
             Quaternion targetRotation = Quaternion.LookRotation(Direction, transform.up);
-            // lerp toward the target rotation
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation,
                 m_Movement.MaxAngularSpeed * Mathf.Deg2Rad * m_Movement.AngularSpeedFactor.Evaluate(Direction.magnitude) * Time.deltaTime);
         }
 
         public void ApplyMovement()
         {
-            Debug.DrawRay(transform.position, FullDirection, Color.yellow);
-            // move toward the direction with the current speed
+            if (Isdead) return;
             m_CharacterController.Move(FullDirection * Time.deltaTime);
         }
 
         private void ManageGravity()
         {
+            if (Isdead) return;
+
             if (m_CharacterController.isGrounded && GravityVelocity < 0.0f)
             {
-                // if grounded set back gravity velocity to a normal number
                 GravityVelocity = -1;
             }
             else
             {
-                // if not grounded add gravity
                 GravityVelocity += GRAVITY * m_Movement.GravityMultiplier * Time.deltaTime;
             }
+        }
+
+        public void SetIsDead(bool isDead)
+        {
+            Isdead = isDead;
         }
     }
 }

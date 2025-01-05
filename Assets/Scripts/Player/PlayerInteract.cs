@@ -9,10 +9,14 @@ public class PlayerInteract : MonoBehaviour
 
     private bool _isInteracting;
 
+    private bool Isdead = false;
+
     [SerializeField]
     private InteractArea _interactArea;
 
     public void OnInteract(InputAction.CallbackContext context){
+        if(Isdead)return;
+
         if(!context.performed)return;
 
         if(_isInteracting) return;
@@ -29,5 +33,9 @@ public class PlayerInteract : MonoBehaviour
         }
         yield return new WaitForSeconds(0.5f);
         _isInteracting = false;
+    }
+
+    public void SetIsDead(bool isDead){
+        Isdead = isDead;
     }
 }

@@ -13,6 +13,8 @@ public class ChestBehavior : MonoBehaviour, Iinteractive
 
     public KeyManager KeyManager;
 
+    private bool IsOpen;
+
     public void Interact(){
         int nbKeys = KeyManager.GetNbKeys();
         if (nbKeys <= 0){
@@ -20,8 +22,10 @@ public class ChestBehavior : MonoBehaviour, Iinteractive
             return;
         }
         else if (nbKeys > 0){
+            if (IsOpen)return;
             KeyManager.SetNbKeys(nbKeys - 1);
-            _animator?.SetBool("Open", true);
+            IsOpen = true;
+            _animator?.SetBool("Open", IsOpen);
             StartCoroutine("Wait");
             CoinManager.AddMultipleCoins(CoinsInChest);
         }

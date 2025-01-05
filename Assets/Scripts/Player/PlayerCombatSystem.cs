@@ -19,8 +19,13 @@ public class PlayerCombatSystem : MonoBehaviour
     [SerializeField]
     private AttackArea _attackArea;
 
+    private bool Isdead = false;
+
+
     public void OnAttack(InputAction.CallbackContext context)
     {
+        if (Isdead) return;
+
         if (!context.performed)return;
         
         if(_isAttacking) return;
@@ -37,5 +42,9 @@ public class PlayerCombatSystem : MonoBehaviour
         }
         yield return new WaitForSeconds(DamageAfterTime);
         _isAttacking = false;
+    }
+
+    public void SetIsDead(bool isDead){
+        Isdead = isDead;
     }
 }
