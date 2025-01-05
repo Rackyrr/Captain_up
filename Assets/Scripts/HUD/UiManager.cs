@@ -9,7 +9,6 @@ public class UiManager : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject DeathScreen;
 
-
     public bool GameFinish = false;
     // private bool isPaused = false;
 

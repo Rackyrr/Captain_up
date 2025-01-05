@@ -1,28 +1,49 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class Teleport : MonoBehaviour
+
+[RequireComponent(typeof(AudioSource), typeof(Collider))]
+
+public class TeleportComponent : MonoBehaviour
 {
-    public Transform player, destination;
-    public GameObject playerg;
+    public TeleportComponent destination;
+    public ParticleSystem teleportEffect;
+    private AudioSource m_AudioSource;
+    private Coroutine m_Coroutine; // Pour stocker la coroutine en cours
 
-    void OnTriggerEnter(Collider other)
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
-        {
-            playerg.SetActive(false);
-            player.position = destination.position;
-            CharacterController controller = player.GetComponent<CharacterController>();
-            if (controller != null)
-            {
-                controller.enabled = false; // Désactive pour réinitialiser
-                controller.transform.position = destination.position; // Assurer la position exacte
-                controller.enabled = true;  // Réactive le CharacterController
-            }
-
-            playerg.SetActive(true);
-        }
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return; // Vérifie si l'objet est le joueur
+        // Démarre la téléportation avec un délai
+        m_Coroutine = StartCoroutine(TeleportAfterDelay(other));
+        teleportEffect.Play();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Player") || m_Coroutine == null) return;
+        StopCoroutine(m_Coroutine);
+        teleportEffect.Stop();
+        m_Coroutine = null;
+    }
+
+    private IEnumerator TeleportAfterDelay(Collider player)
+    {
+        yield return new WaitForSeconds(2f); // Attend 2 secondes
+
+        // Vérifie que la coroutine n'a pas été annulée
+        if (player)
+        {
+            destination.m_AudioSource.Play();
+            player.transform.position = destination.transform.position;
+        }
+        m_Coroutine = null; // Réinitialise la coroutine
+        teleportEffect.Stop();
+    }
 }
