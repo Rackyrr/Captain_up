@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IDamageable
     public float walkPointRange;
     public float timeBetweenAttacks;
     public float sightRange;
-    public float attackRange;
+    public float attackRange; // Utilisé pour dessiner la portée
     public int damage;
     public Animator animator;
     public ParticleSystem hitEffect;
@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private bool alreadyAttacked;
     private bool takeDamage;
     private bool isDead;
+    private Collider attackZone; // Nouveau composant pour détecter les cibles
 
     [SerializeField]
     public HealthBarScript healthHUD;
@@ -31,13 +32,20 @@ public class Enemy : MonoBehaviour, IDamageable
         animator = GetComponent<Animator>();
         player = GameObject.Find("Player").transform;
         navAgent = GetComponent<NavMeshAgent>();
+
+        // Ajoute un collider pour la zone d'attaque si inexistant
+        attackZone = GetComponent<SphereCollider>();
+        if (attackZone == null)
+        {
+            attackZone = gameObject.AddComponent<SphereCollider>();
+            attackZone.isTrigger = true;
+            ((SphereCollider)attackZone).radius = attackRange;
+        }
     }
 
     private void Update()
     {
-        if (isDead){
-            return;
-        }
+        if (isDead) return;
 
         if (health <= 0)
         {
@@ -45,26 +53,24 @@ public class Enemy : MonoBehaviour, IDamageable
             return;
         }
 
+        // Vérifie si le joueur est visible et entièrement dans la zone d'attaque
         bool playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerLayer);
-        bool playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerLayer);
+        bool playerFullyInAttackRange = PlayerFullyInAttackRange();
 
-        if (!playerInSightRange && !playerInAttackRange)
+        if (!playerInSightRange && !playerFullyInAttackRange)
         {
             Patroling();
         }
-        else if (playerInSightRange && !playerInAttackRange)
+        else if (playerInSightRange && !playerFullyInAttackRange)
         {
             ChasePlayer();
         }
-        else if (playerInAttackRange && playerInSightRange)
+        else if (playerFullyInAttackRange)
         {
             AttackPlayer();
         }
-        else if (!playerInSightRange && takeDamage)
-        {
-            ChasePlayer();
-        }
     }
+
 
     private void Patroling()
     {
@@ -108,7 +114,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void AttackPlayer()
     {
-        navAgent.SetDestination(transform.position);
+        navAgent.SetDestination(transform.position); // Arrête l'ennemi
 
         if (!alreadyAttacked)
         {
@@ -117,20 +123,12 @@ public class Enemy : MonoBehaviour, IDamageable
             animator.SetBool("Attack", true);
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
 
-            RaycastHit hit;
-            Vector3 rayOrigin = transform.position + Vector3.up * 0.5f;
-            Vector3 rayDirection = transform.forward;
-            if (Physics.Raycast(rayOrigin, rayDirection, out hit, attackRange))
+            if (PlayerIsFullyInAttackZone())
             {
-                Debug.Log("Hit object: " + hit.collider.name);
-                if (hit.transform.CompareTag("Player"))
+                Debug.Log("Player fully inside attack zone.");
+                if (healthHUD != null)
                 {
-                    Debug.Log("touch Player");
-                    if (healthHUD != null)
-                    {
-                        Debug.Log("HUD Found");
-                        healthHUD.TakeDammage(damage);
-                    }
+                    healthHUD.TakeDammage(damage);
                 }
             }
         }
@@ -142,19 +140,23 @@ public class Enemy : MonoBehaviour, IDamageable
         animator.SetBool("Attack", false);
     }
 
+    private bool PlayerIsFullyInAttackZone()
+    {
+        // Vérifie si la position du joueur est entièrement dans la zone d'attaque
+        if (attackZone.bounds.Contains(player.position))
+        {
+            Debug.Log("Player is completely within attack zone.");
+            return true;
+        }
+        return false;
+    }
+
     public void Damage(int damageAmount)
     {
         if (isDead) return;
 
         health -= damageAmount;
         Debug.Log($"Enemy took {damageAmount} damage. Remaining health: {health}");
-    }
-
-    private IEnumerator TakeDamageCoroutine()
-    {
-        takeDamage = true;
-        yield return new WaitForSeconds(2f);
-        takeDamage = false;
     }
 
     private void DestroyEnemy()
@@ -170,7 +172,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private IEnumerator DestroyEnemyCoroutine()
     {
-        animator.SetBool("Dead", true); 
+        animator.SetBool("Dead", true);
         yield return new WaitForSeconds(1.8f);
         Destroy(gameObject);
     }
@@ -182,4 +184,24 @@ public class Enemy : MonoBehaviour, IDamageable
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, sightRange);
     }
+    private bool PlayerFullyInAttackRange()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, attackRange, playerLayer);
+        foreach (var collider in colliders)
+        {
+            if (collider.CompareTag("Player"))
+            {
+                Bounds enemyAttackBounds = new Bounds(transform.position, new Vector3(attackRange * 2, attackRange * 2, attackRange * 2));
+                Bounds playerBounds = collider.bounds;
+
+                // Vérifie que toutes les limites du joueur sont contenues dans la zone d'attaque
+                if (enemyAttackBounds.Contains(playerBounds.min) && enemyAttackBounds.Contains(playerBounds.max))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
